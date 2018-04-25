@@ -20,7 +20,6 @@ var LOGGER = &Logger{log.New(os.Stderr, "", log.LstdFlags)}
 func Fatal(format string, v ...interface{}) {
 	// https://github.com/isaaxiot/log/blob/master/log.go#L45
 	LOGGER.Output(2, fmt.Sprintf("FATAL -- "+format, v...)+"\n"+string(debug.Stack()))
-	os.Exit(1)
 }
 
 // partitionString partitions the string into chunks of given size,
