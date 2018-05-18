@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"sync"
 	"syscall"
+	"time"
 
 	"github.com/isaaxiot/tail/util"
 
@@ -24,6 +25,7 @@ type InotifyTracker struct {
 	watch     chan *watchInfo
 	remove    chan *watchInfo
 	error     chan error
+	retry     int
 }
 
 type watchInfo struct {
@@ -216,7 +218,12 @@ func (shared *InotifyTracker) sendEvent(event fsnotify.Event) {
 func (shared *InotifyTracker) run() {
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
-		util.Fatal("failed to create Watcher")
+		util.Fatal("failed to create Watcher", err)
+		shared.retry++
+		if shared.retry < 10 {
+			time.Sleep(1 * time.Second)
+			go shared.run()
+		}
 		return
 	}
 	shared.watcher = watcher
