@@ -19,14 +19,15 @@ var LOGGER = &Logger{log.New(os.Stderr, "", log.LstdFlags)}
 // fatal is like panic except it displays only the current goroutine's stack.
 func Fatal(format string, v ...interface{}) {
 	// https://github.com/isaaxiot/log/blob/master/log.go#L45
-	LOGGER.Output(2, fmt.Sprintf("FATAL -- "+format, v...)+"\n"+string(debug.Stack()))
+	LOGGER.Output(2, fmt.Sprintf("FATAL -- "+format, v...)+"\n") //+string(debug.Stack())
 }
 
 // partitionString partitions the string into chunks of given size,
 // with the last chunk of variable size.
 func PartitionString(s string, chunkSize int) []string {
 	if chunkSize <= 0 {
-		panic("invalid chunkSize")
+		LOGGER.Output(2, "FATAL -- invalid chunkSize\n"+string(debug.Stack()))
+		return []string{}
 	}
 	length := len(s)
 	chunks := 1 + length/chunkSize
