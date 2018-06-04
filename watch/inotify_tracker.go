@@ -11,9 +11,8 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/fsnotify/fsnotify"
 	"github.com/isaaxiot/tail/util"
-
-	"gopkg.in/fsnotify/fsnotify.v1"
 )
 
 type InotifyTracker struct {
